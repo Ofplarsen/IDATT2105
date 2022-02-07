@@ -5,7 +5,8 @@
   >
     {{ label }}
   </label>
-  <input
+
+  <textarea
     class="field"
     v-bind="{
       ...$attrs,
@@ -18,6 +19,8 @@
     :aria-invalid="error ? true : false"
     :class="{ error }"
   >
+  </textarea>
+
   <BaseErrorMessage
     v-if="error"
     :id="`${uuid}-error`"
@@ -27,11 +30,12 @@
 </template>
 
 <script>
-import SetupFormComponent from '@/features/SetupFormComponent'
-import UniqueID from '@/features/UniqueID'
+import SetupFormComponent from "@/features/SetupFormComponent";
+import UniqueID from "@/features/UniqueID";
 import BaseErrorMessage from "@/components/form/BaseErrorMessage";
 
 export default {
+  name: "BaseTextarea",
   components: { BaseErrorMessage },
   props: {
     label: {
@@ -56,5 +60,12 @@ export default {
       uuid
     }
   }
-}
+};
 </script>
+
+<style scoped>
+textarea {
+  width: 460px;
+  height: 150px;
+}
+</style>

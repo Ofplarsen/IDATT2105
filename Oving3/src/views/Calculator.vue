@@ -1,4 +1,6 @@
 <template>
+  <router-link to="/"
+               >Hei</router-link>
   <h1>Calculator</h1>
   <div class="screen-split">
     <div class="calculator_container" >
@@ -58,7 +60,7 @@ export default {
 
       for (let i = 0; i < this.$store.state.operator.length; i++) {
         solution = this.solver(solution, this.$store.state.operator[i], this.$store.state.calc[i+1])
-        console.log(solution)
+
       }
 
       this.addToLog(solution)
@@ -72,14 +74,14 @@ export default {
 
         this.$store.dispatch("addToCalculation", v.target.innerText);
         this.$store.dispatch("addToTempCalc", v.target.innerText);
-        console.log(this.$store.state.calculation)
+
       }
     },
 
     addOperator(e){
 
       if(!this.$store.state.operatorLast){
-        console.log(this.$store.state.tempCalc)
+
         this.$store.dispatch("addToCalculationArray", this.$store.state.tempCalc);
 
         this.add(e)
@@ -104,8 +106,7 @@ export default {
     clear(){
       this.$store.dispatch("clear");
       this.resetValues()
-      console.log(this.$store.state.calculation)
-      console.log(this.$store.state.calc)
+
     },
     addToLog(solution){
       this.$store.dispatch("addToLog", solution)

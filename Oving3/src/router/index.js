@@ -1,19 +1,20 @@
 import { createRouter, createWebHistory } from "vue-router";
 
+
+import ContactUs from "@/views/form/ContactUs";
 import Calculator from "@/views/Calculator";
-import ContactUs from "@/views/ContactUs";
 
 const routes = [
   {
-    path: "/",
-    name: "Calculator",
-    component: Calculator,
-  },
-  {
     path: "/contact-us",
-    name: "Contact us",
+    name: "ContactUs",
     component: ContactUs
   },
+  {
+    path: "/calc",
+    name: "Calculator",
+    component: Calculator
+  }
 ];
 
 const router = createRouter({

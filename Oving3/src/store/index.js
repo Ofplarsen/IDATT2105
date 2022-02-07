@@ -10,7 +10,12 @@ export default createStore({
     solution: 0,
     operatorLast: false,
     commaLast: false,
-    ans: 0
+    ans: 0,
+
+    contact_form: {
+      name: '',
+      email: '',
+    }
   },
   mutations: {
     CLEAR(state){
@@ -18,7 +23,7 @@ export default createStore({
     },
     ADD_TO_CALC(state, number){
       state.calculation += number
-      console.log(number)
+
       if(number.toString() === '.'){
         state.commaLast = true;
       }else{
@@ -31,20 +36,17 @@ export default createStore({
     },
     SET_SOLUTION(state, number){
 
-      console.log(state.log)
 
       state.solution = number
       state.ans = number
       state.calculation = number
       state.tempCalc = number
-      console.log(state.tempCalc)
-      console.log(state.calculation)
     },
     RESET_VALUES(state){
       state.calc = []
       state.operator = []
       state.tempCalc = ''
-      console.log(state.calc)
+
     },
     RESET_TEMP_CALC(state){
       state.tempCalc = ''
@@ -60,8 +62,7 @@ export default createStore({
       if(state.operatorLast){
         state.operator.pop()
       }
-      console.log(state.tempCalc)
-      console.log(state.calculation !== undefined)
+
 
       state.tempCalc = state.tempCalc.toString().slice(0, -1)
 
@@ -77,7 +78,17 @@ export default createStore({
     ADD_TO_LOG(state, solution){
       if(state.calculation + " = " + solution !== state.log[state.log.length-1])
         state.log.push(state.calculation + " = " + solution)
-    }
+    },
+    ADD_NAME_TO_FORM(state, name){
+
+      state.contact_form.name = (name)
+
+    },
+    ADD_EMAIL_TO_FORM(state, email){
+
+      state.contact_form.email = (email)
+
+    },
     }
   ,
   actions: {
@@ -115,6 +126,13 @@ export default createStore({
     },
     addAns ({commit}){
     return commit('ADD_ANS')
+    },
+    addNameToForm( {commit}, name){
+
+      return commit('ADD_NAME_TO_FORM', name)
+    },
+    addEmailToForm( {commit}, email){
+      return commit('ADD_EMAIL_TO_FORM', email)
     },
   },
   modules: {},
