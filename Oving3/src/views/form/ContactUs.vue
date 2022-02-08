@@ -19,15 +19,15 @@
 
     <BaseTextarea
       label="Message"
-      type="text"
       v-model="message"
       :error="messageError"
     />
 
     <BaseButton
       type="submit"
-      class="-fill-gradient"
-      @click="saveUserInfo(name, email)"
+      class="button"
+      :disabled="disabled"
+
     >
       Submit
     </BaseButton>
@@ -40,15 +40,28 @@ import BaseInput from "@/components/form/BaseInput";
 import { useField, useForm } from "vee-validate";
 import BaseButton from "@/components/form/BaseButton";
 import BaseTextarea from "@/components/form/BaseTextarea";
+import { watch } from "vue";
+
+
 export default {
   name: "ContactUs",
   components: { BaseTextarea, BaseButton, BaseInput },
-
-  setup () {
-    function onSubmit () {
-
+  props:{
+    submit:{
+      disabled: false
     }
 
+  },
+  data(){
+    return{
+
+    }
+  },
+  setup () {
+    function onSubmit() {
+      this.$store.dispatch("addNameToForm", name.value)
+      this.$store.dispatch("addEmailToForm", email.value)
+    }
     const validations = {
       email: value => {
         if (!value) return "This field is required";
@@ -63,14 +76,14 @@ export default {
       name: value => {
         const requiredMessage = 'Please enter a valid name'
         if (value === undefined || value === null) return requiredMessage
-        if (!String(value).length) return requiredMessage
+        if (String(value).length === 0) return requiredMessage
 
         return true
       },
       message: value => {
         const requiredMessage = 'This field is required'
         if (value === undefined || value === null) return requiredMessage
-        if (!String(value).length) return requiredMessage
+        if (String(value).length === 0) return requiredMessage
 
         return true
       }
@@ -81,8 +94,18 @@ export default {
     })
 
     const { value: email, errorMessage: emailError, handleChange } = useField('email')
-    const { value: name, errorMessage: nameError } = useField("name")
-    const { value: message, errorMessage: messageError } = useField('message')
+    const { value: name, errorMessage: nameError} = useField("name")
+    const { value: message, errorMessage: messageError } = useField("message");
+    let  disabled = false
+
+    watch([emailError, nameError, messageError], ([newE, newN, newM]) => {
+      console.log(newE, newN, newM)
+      if(newE === undefined && newN === undefined && newM === undefined){
+        disabled = false
+      }else{
+        disabled = true
+      }
+    })
 
     return {
       onSubmit,
@@ -92,27 +115,15 @@ export default {
       nameError,
       message,
       messageError,
-      handleChange
+      handleChange,
+      disabled
     }
   },
   methods: {
-    storeName(name){
 
-      this.$store.dispatch("addNameToForm", name)
-      console.log(this.$store.state.contact_form.name)
-    },
-    storeEmail(email){
-      this.$store.dispatch("addEmailToForm", email)
-      console.log(this.$store.state.contact_form.email)
-    },
-    saveUserInfo(name, email){
-      this.storeName(name)
-      this.storeEmail(email)
-    }
   }
 };
 </script>
 
 <style scoped>
-
 </style>

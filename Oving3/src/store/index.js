@@ -15,6 +15,7 @@ export default createStore({
     contact_form: {
       name: '',
       email: '',
+      messageStatus: ''
     }
   },
   mutations: {
@@ -89,6 +90,11 @@ export default createStore({
       state.contact_form.email = (email)
 
     },
+    UPDATE_MESSAGE_FORM(state, message){
+
+      state.contact_form.messageStatus = (message)
+
+    },
     }
   ,
   actions: {
@@ -134,6 +140,9 @@ export default createStore({
     addEmailToForm( {commit}, email){
       return commit('ADD_EMAIL_TO_FORM', email)
     },
+    updateMessageStatus({commit}, message){
+      return commit('UPDATE_MESSAGE_FORM', message)
+}
   },
   modules: {},
 });
