@@ -13,9 +13,9 @@ export default createStore({
     ans: 0,
 
     contact_form: {
-      name: '',
-      email: '',
-      messageStatus: ''
+      name: [],
+      email: [],
+      messageStatus: []
     }
   },
   mutations: {
@@ -82,17 +82,17 @@ export default createStore({
     },
     ADD_NAME_TO_FORM(state, name){
 
-      state.contact_form.name = (name)
+      state.contact_form.name.push(name)
 
     },
     ADD_EMAIL_TO_FORM(state, email){
 
-      state.contact_form.email = (email)
+      state.contact_form.email.push(email)
 
     },
     UPDATE_MESSAGE_FORM(state, message){
 
-      state.contact_form.messageStatus = (message)
+      state.contact_form.messageStatus.push(message)
 
     },
     }

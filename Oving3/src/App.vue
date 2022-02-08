@@ -1,5 +1,8 @@
 
 <template>
+  <div id="flashMessage" v-if="GStore.flashMessage">
+    {{ GStore.flashMessage }}
+  </div>
   <router-view></router-view>
 </template>
 
@@ -29,10 +32,24 @@
 
 
 export default {
-  components: {  }
+  components: {  },
+  inject: ['GStore']
 }
 </script>
 <style>
+@keyframes yellowfade {
+  from {
+    background: yellow;
+  }
+  to {
+    background: transparent;
+  }
+}
+
+#flashMessage {
+  animation-name: yellowfade;
+  animation-duration: 5s;
+}
 html {
   -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
@@ -261,13 +278,6 @@ select {
 select:focus {
   border-color: #39b982;
   outline: 0;
-}
-select:focus::ms-value {
-  color: #000;
-  background: #fff;
-}
-select::ms-expand {
-  opacity: 0;
 }
 .field {
   margin-bottom: 24px;

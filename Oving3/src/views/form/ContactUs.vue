@@ -1,5 +1,6 @@
 <template>
   <h1>Form</h1>
+
   <form @submit.prevent="onSubmit">
 
     <BaseInput
@@ -26,8 +27,8 @@
     <BaseButton
       type="submit"
       class="button"
-      :disabled="disabled"
-
+      :disabled="!isComplete || !errors"
+      @click = "onSubmit"
     >
       Submit
     </BaseButton>
@@ -40,28 +41,14 @@ import BaseInput from "@/components/form/BaseInput";
 import { useField, useForm } from "vee-validate";
 import BaseButton from "@/components/form/BaseButton";
 import BaseTextarea from "@/components/form/BaseTextarea";
-import { watch } from "vue";
 
 
 export default {
   name: "ContactUs",
   components: { BaseTextarea, BaseButton, BaseInput },
-  props:{
-    submit:{
-      disabled: false
-    }
+  inject: ['GStore'],
+  setup() {
 
-  },
-  data(){
-    return{
-
-    }
-  },
-  setup () {
-    function onSubmit() {
-      this.$store.dispatch("addNameToForm", name.value)
-      this.$store.dispatch("addEmailToForm", email.value)
-    }
     const validations = {
       email: value => {
         if (!value) return "This field is required";
@@ -94,33 +81,63 @@ export default {
     })
 
     const { value: email, errorMessage: emailError, handleChange } = useField('email')
-    const { value: name, errorMessage: nameError} = useField("name")
+    const { value: name, errorMessage: nameError } = useField("name")
     const { value: message, errorMessage: messageError } = useField("message");
-    let  disabled = false
 
-    watch([emailError, nameError, messageError], ([newE, newN, newM]) => {
-      console.log(newE, newN, newM)
-      if(newE === undefined && newN === undefined && newM === undefined){
-        disabled = false
-      }else{
-        disabled = true
-      }
-    })
 
     return {
-      onSubmit,
       email,
       emailError,
       name,
       nameError,
       message,
       messageError,
-      handleChange,
-      disabled
+      handleChange
+    }
+  },
+  computed: {
+    isComplete() {
+      //console.log(this.name !== undefined && this.email !== undefined && this.message !== undefined)
+      return (this.name !== undefined && this.email !== undefined && this.message !== undefined);
+    },
+    errors() {
+      //console.log(this.nameError === undefined && this.emailError === undefined && this.messageError === undefined)
+      return this.nameError === undefined && this.emailError === undefined && this.messageError === undefined
     }
   },
   methods: {
+    onSubmit() {
+      this.storeContactInfo()
+      this.storeMessage()
+      this.GStore.flashMessage = "Sending Message..."
 
+      this.showFlashMessage()
+      console.log(this.$store.state.contact_form.email)
+      console.log(this.$store.state.contact_form.name)
+      console.log(this.$store.state.contact_form.messageStatus)
+      setTimeout(() => {
+        this.toHomePage()
+      }, 4000)
+    },
+    storeContactInfo(){
+      this.$store.dispatch("addNameToForm", this.name)
+      this.$store.dispatch("addEmailToForm", this.email)
+    },
+    storeMessage(){
+      this.$store.dispatch("updateMessageStatus", this.message)
+    },
+    toHomePage(){
+      this.$router.push('/');
+    },
+    showFlashMessage(){
+      setTimeout(() => {
+        this.GStore.flashMessage = "Message sent!"
+      }, 2000)
+
+      setTimeout(() => {
+        this.GStore.flashMessage = ""
+      }, 3000)
+    }
   }
 };
 </script>

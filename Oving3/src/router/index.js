@@ -3,8 +3,14 @@ import { createRouter, createWebHistory } from "vue-router";
 
 import ContactUs from "@/views/form/ContactUs";
 import Calculator from "@/views/Calculator";
+import Home from "@/views/Home";
 
 const routes = [
+  {
+    path: "/",
+    name: "Home",
+    component: Home
+  },
   {
     path: "/contact-us",
     name: "ContactUs",
