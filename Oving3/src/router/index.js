@@ -4,6 +4,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import ContactUs from "@/views/form/ContactUs";
 import Calculator from "@/views/Calculator";
 import Home from "@/views/Home";
+import Login from "@/components/Login";
 
 const routes = [
   {
@@ -20,7 +21,12 @@ const routes = [
     path: "/calc",
     name: "Calculator",
     component: Calculator
-  }
+  },
+  {
+    path: "/login",
+    name: "Login",
+    component: Login
+  },
 ];
 
 const router = createRouter({
