@@ -5,6 +5,7 @@ import ContactUs from "@/views/form/ContactUs";
 import Calculator from "@/views/Calculator";
 import Home from "@/views/Home";
 import Login from "@/components/Login";
+import Register from "@/components/Register";
 
 const routes = [
   {
@@ -26,6 +27,11 @@ const routes = [
     path: "/login",
     name: "Login",
     component: Login
+  },
+  {
+    path: "/register",
+    name: "Register",
+    component: Register
   },
 ];
 
