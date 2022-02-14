@@ -20,7 +20,7 @@
       <label id="loginstatusLabel">{{loginStatus}}</label>
     </div>
   </div>
-  <div v-if="!loginStatus">Not registered yet? <router-link to="/register">Register</router-link></div>
+  <div v-if="!loginStatus" id="registered">Not registered yet? <router-link to="/register">Register</router-link></div>
 </template>
 
 

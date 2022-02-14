@@ -1,5 +1,7 @@
-import { shallowMount } from "@vue/test-utils";
+import { shallowMount} from "@vue/test-utils";
 import LoginComponent from "@/components/Login.vue";
+import store from '@/store'
+import router from '@/router'
 
 describe("LoginComponent.vue", () => {
   it('check that LoginComponent renders', () => {
@@ -14,7 +16,7 @@ describe("LoginComponent.vue", () => {
     // check that id of the loginstatusLabel element is correct
     expect(statusId.element.id).toBe('loginstatusLabel');
     // check that the loginstatusLabel element is displaying correct value
-    expect(statusId.element.textContent).toBe('');
+    expect(statusId.element.textContent).toBe('true');
   }),
 
   it('Modify LoginComponent data and test', async () => {
@@ -44,7 +46,11 @@ describe("LoginComponent.vue", () => {
   }),
 
   it('Right username and password == True', async () => {
-    const wrapper = shallowMount(LoginComponent)
+    const wrapper = shallowMount(LoginComponent,{
+      global:{
+        plugins: [store, router]
+      }
+    })
 
     // get loginstatusLabel element
     const statusId = wrapper.find('#loginstatusLabel');
@@ -53,13 +59,17 @@ describe("LoginComponent.vue", () => {
     await wrapper.setData({password: '123'});
     const button =  wrapper.find('#submitButton');
     await button.trigger('click')
-    expect(statusId.element.textContent).toBe('true');
+    await expect(statusId.element.textContent).toBe('true');
     await wrapper.setData({loginStatus: 'false'});
-    expect(statusId.element.textContent).toBe('false');
+    await expect(statusId.element.textContent).toBe('false');
   }),
 
     it('Username and password as expected', async () => {
-      const wrapper = shallowMount(LoginComponent)
+      const wrapper = shallowMount(LoginComponent, {
+          global: {
+            plugins: [store, router]
+          }
+        })
 
       // get loginstatusLabel element
       const statusId = wrapper.find('#loginstatusLabel');
@@ -74,7 +84,11 @@ describe("LoginComponent.vue", () => {
     }),
 
     it('Clicking register takes you to register site', async () => {
-      const wrapper = shallowMount(LoginComponent)
+      const wrapper = shallowMount(LoginComponent, {
+        global: {
+          plugins: [store, router]
+        }
+      })
 
       // get loginstatusLabel element
       const statusId = wrapper.find('#loginstatusLabel');
@@ -86,5 +100,35 @@ describe("LoginComponent.vue", () => {
       expect(statusId.element.textContent).toBe('true');
       await wrapper.setData({loginStatus: 'false'});
       expect(statusId.element.textContent).toBe('false');
+    }),
+
+    it('Register pops up if failed to log in', async () => {
+      const wrapper = shallowMount(LoginComponent, {
+        global: {
+          plugins: [store, router]
+        }
+      })
+      const statusId = wrapper.find('#loginstatusLabel');
+      await wrapper.setData({username: 'wrong'});
+      await wrapper.setData({password: '123'});
+      const button =  wrapper.find('#submitButton');
+      await button.trigger('click')
+      const signInText = wrapper.find('#registered');
+      await expect(statusId.element.textContent).toBe('false');
+      await expect(signInText.element.textContent).toContain('Not registered yet?');
+    }),
+
+    it('Gets redirected to home page', async () => {
+      const wrapper = shallowMount(LoginComponent, {
+        global: {
+          plugins: [store, router]
+        }
+      })
+      const statusId = wrapper.find('#loginstatusLabel');
+      await wrapper.setData({username: 'admin'});
+      await wrapper.setData({password: '123'});
+      const button =  wrapper.find('#submitButton');
+      await button.trigger('click')
+      wrapper =
     })
 });
