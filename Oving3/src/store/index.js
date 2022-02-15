@@ -1,7 +1,6 @@
 import { createStore } from "vuex";
 
-export default createStore({
-  state: {
+export default createStore({ state: {
     calculation:'',
     log: [],
     operator: [],
@@ -120,7 +119,7 @@ export default createStore({
       return commit('ADD_TO_CALC', number)
     },
     addToCalculationArray( {commit}, number){
-    return commit('ADD_TO_CALC_ARRAY', number)
+      return commit('ADD_TO_CALC_ARRAY', number)
     },
     addToTempCalc( {commit}, number){
       return commit('ADD_TO_TEMP_CALC', number)
@@ -141,7 +140,7 @@ export default createStore({
       return commit('REMOVE_FROM_CALC')
     },
     addAns ({commit}){
-    return commit('ADD_ANS')
+      return commit('ADD_ANS')
     },
     addNameToForm( {commit}, name){
 

@@ -17,7 +17,6 @@
 
     <div>
       <button v-on:click="handleClickSignin_2" id="submitButton">Sign in</button>
-      <label id="loginstatusLabel">{{loginStatus}}</label>
     </div>
   </div>
   <div v-if="!loginStatus" id="registered">Not registered yet? <router-link to="/register">Register</router-link></div>

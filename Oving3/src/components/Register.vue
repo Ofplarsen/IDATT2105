@@ -32,7 +32,7 @@
     v-model="email"
   ></BaseInput>
 
-  <button id="btnRegister">Register</button>
+  <button id="btnRegister" @click="register">Register</button>
 </template>
 
 <script>
@@ -47,7 +47,14 @@ export default {
       name: '',
       address: '',
       email: '',
-      registerStatus: '',
+      registerStatus: false,
+    }
+  },
+  methods:{
+    register(){
+      if(this.name.length !== 0 && this.password.length !== 0 && this.address.length !== 0 && this.email.length !== 0 && this.username.length !== 0){
+        this.registerStatus = true
+      }
     }
   }
 };
