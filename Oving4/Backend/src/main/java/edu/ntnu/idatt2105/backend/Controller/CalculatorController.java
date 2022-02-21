@@ -5,12 +5,10 @@ import edu.ntnu.idatt2105.backend.model.Equation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
+@CrossOrigin(origins = "http://localhost:8081", maxAge = 3600)
 @RestController
+@RequestMapping("/calc")
 public class CalculatorController {
 
     @Autowired
@@ -19,13 +17,13 @@ public class CalculatorController {
     Logger logger = LoggerFactory.getLogger(CalculatorController.class);
 
 
-    @GetMapping("calc/ans")
+    @GetMapping("/ans")
     public double answer(){
         logger.info("Retrieved answer: " + service.getAnswer());
         return service.getAnswer();
     }
 
-    @PostMapping("calc/solve")
+    @PostMapping("/solve")
     public double solve(@RequestBody Equation equation){
         service.solve(equation);
         logger.info("Equation: n1: " + equation.getN1() +", n2: " +  equation.getN2()
@@ -34,5 +32,9 @@ public class CalculatorController {
         return service.getAnswer();
     }
 
-
+    @GetMapping("/log")
+    public String log(){
+        logger.info("Added to log: " + service.toString());
+        return service.toString();
+    }
 }

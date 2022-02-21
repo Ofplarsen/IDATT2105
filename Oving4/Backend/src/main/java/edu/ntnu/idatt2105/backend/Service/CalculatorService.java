@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 public class CalculatorService {
 
     private double answer;
-
+    private Equation equation;
     /*
     @Autowired
     private CalculatorRepo repo;
@@ -15,6 +15,7 @@ public class CalculatorService {
      */
 
     public double solve(Equation equation){
+        this.equation = equation;
         if(equation.getOperator() == '+'){
             return answer = equation.getN1() + equation.getN2();
         }else if(equation.getOperator() == '-'){
@@ -29,5 +30,9 @@ public class CalculatorService {
 
     public double getAnswer() {
         return answer;
+    }
+
+    public String toString(){
+        return equation.toString() + " = " + answer;
     }
 }

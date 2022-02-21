@@ -28,4 +28,9 @@ public class Equation {
     public void setOperator(char operator) {
         this.operator = operator;
     }
+
+    @Override
+    public String toString() {
+        return n1 + "" + operator + "" + n2;
+    }
 }
