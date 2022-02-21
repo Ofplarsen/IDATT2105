@@ -8,13 +8,13 @@ export function postEquation(equation){
 }
 
 export function getAnswer(){
-  return axios.post("http://localhost:8080/calc/ans").then((response) => {
+  return axios.get("http://localhost:8080/calc/ans").then((response) => {
     return response.data
   })
 }
 
 export function getLog(){
-  return axios.post("http://localhost:8080/calc/log").then((response) => {
+  return axios.get("http://localhost:8080/calc/log").then((response) => {
     return response.data
   })
 }

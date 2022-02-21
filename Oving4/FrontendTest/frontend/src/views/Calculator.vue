@@ -40,7 +40,7 @@
 
 <script>
 import CalcLog from "@/components/CalcLog";
-import * as calculator from "@/services/axios"
+import * as calculator from "@/services/index"
 export default {
   components: { CalcLog },
   methods: {
@@ -51,18 +51,18 @@ export default {
         operator: operator
       })
     },
-    solve(){
+    async solve() {
       this.$store.dispatch("addToCalculationArray", this.$store.state.tempCalc)
 
       let solution = parseFloat(this.$store.state.calc[0])
 
       for (let i = 0; i < this.$store.state.operator.length; i++) {
-        solution = this.solver(solution, this.$store.state.operator[i], this.$store.state.calc[i+1])
+        solution = this.solver(solution, this.$store.state.operator[i], this.$store.state.calc[i + 1])
       }
 
-      this.addToLog(solution)
-      this.setSolution(solution)
-      this.resetValues()
+      await this.updateLog()
+      await this.setSolution(await solution)
+      await this.resetValues()
 
 
     },
@@ -92,7 +92,8 @@ export default {
       this.$store.dispatch("deleteFromCalc");
     },
     async ans(){
-      await this.add(calculator.getAnswer())
+      const ans = await calculator.getAnswer()
+      this.$store.dispatch("addAns", ans);
     },
     resetValues(){
       this.$store.dispatch("resetValues");
@@ -105,8 +106,8 @@ export default {
       this.resetValues()
 
     },
-    async addToLog() {
-      await this.$store.dispatch("addToLog", calculator.getLog())
+    async updateLog() {
+      this.$store.dispatch("updateLog", await calculator.getLog())
     },
     setSolution(solution){
       this.$store.dispatch("setSolution", solution)
