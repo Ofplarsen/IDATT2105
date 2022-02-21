@@ -2,8 +2,8 @@ package edu.ntnu.idatt2105.backend.model;
 
 public class Equation {
     private double n1;
-    private int n2;
-    private double operator;
+    private double n2;
+    private char operator;
 
     public double getN1() {
         return n1;
@@ -13,7 +13,7 @@ public class Equation {
         this.n1 = n1;
     }
 
-    public int getN2() {
+    public double getN2() {
         return n2;
     }
 
@@ -21,7 +21,7 @@ public class Equation {
         this.n2 = n2;
     }
 
-    public double getOperator() {
+    public char getOperator() {
         return operator;
     }
 
@@ -31,6 +31,6 @@ public class Equation {
 
     @Override
     public String toString() {
-        return n1 + "" + operator + "" + n2;
+        return n1 + " " + operator + " " + n2;
     }
 }

@@ -3,11 +3,14 @@ package edu.ntnu.idatt2105.backend.Service;
 import edu.ntnu.idatt2105.backend.model.Equation;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 public class CalculatorService {
 
     private double answer;
     private Equation equation;
+    private ArrayList<String>  log = new ArrayList<>();
     /*
     @Autowired
     private CalculatorRepo repo;
@@ -34,5 +37,17 @@ public class CalculatorService {
 
     public String toString(){
         return equation.toString() + " = " + answer;
+    }
+
+    public boolean addToLog(String toAdd){
+        if(log.size() == 0 || !toAdd.equals(log.get(log.size()-1))){
+            log.add(toAdd);
+            return true;
+        }
+        return false;
+    }
+
+    public ArrayList<String> getLog() {
+        return log;
     }
 }
