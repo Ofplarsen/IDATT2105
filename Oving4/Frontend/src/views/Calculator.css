@@ -22,22 +22,24 @@
     text-align: left;
     margin-bottom: 10px;
 }
+body{
+    width: 100%;
+}
 @media (min-width: 481px) {
 
     .calculator_container {
-        margin-left: 200px;
 
     }
 
     .box-container {
-        margin-top: 10px;
-        height: 400px;
+        height: 630px;
         grid-column: 3 / span 4;
         border: black;
+        width: 100%;
         background: antiquewhite;
         border-style: solid;
         overflow: auto;
-        margin-right: 100px;
+        margin-right: 300px;
     }
 
     .screen-split {

@@ -1,6 +1,6 @@
 <template>
   <router-link to="/"
-               >Hei</router-link>
+               >Home</router-link>
   <h1>Calculator</h1>
   <div class="screen-split">
     <div class="calculator_container" >
@@ -40,27 +40,24 @@
 
 <script>
 import CalcLog from "@/components/CalcLog";
+import * as calculator from "@/services/axios"
 export default {
   components: { CalcLog },
   methods: {
-    solver(num1, operator, num2){
-      var math_it_up = {
-        '+': function (x, y) {return x + y },
-        "-": function (x, y) {return x - y },
-        "*": function (x, y) {return x * y },
-        "/": function (x, y) {return x / y },
-      };
-      return math_it_up[operator](parseFloat(num1),parseFloat(num2))
+    async solver(num1, operator, num2){
+      return await calculator.postEquation({
+        n1: num1,
+        n2: num2,
+        operator: operator
+      })
     },
     solve(){
       this.$store.dispatch("addToCalculationArray", this.$store.state.tempCalc)
-
 
       let solution = parseFloat(this.$store.state.calc[0])
 
       for (let i = 0; i < this.$store.state.operator.length; i++) {
         solution = this.solver(solution, this.$store.state.operator[i], this.$store.state.calc[i+1])
-
       }
 
       this.addToLog(solution)
@@ -94,8 +91,8 @@ export default {
     del(){
       this.$store.dispatch("deleteFromCalc");
     },
-    ans(){
-      this.$store.dispatch('addAns')
+    async ans(){
+      await this.add(calculator.getAnswer())
     },
     resetValues(){
       this.$store.dispatch("resetValues");
@@ -108,8 +105,8 @@ export default {
       this.resetValues()
 
     },
-    addToLog(solution){
-      this.$store.dispatch("addToLog", solution)
+    async addToLog() {
+      await this.$store.dispatch("addToLog", calculator.getLog())
     },
     setSolution(solution){
       this.$store.dispatch("setSolution", solution)

@@ -84,7 +84,6 @@ export default {
     const { value: name, errorMessage: nameError } = useField("name")
     const { value: message, errorMessage: messageError } = useField("message");
 
-
     return {
       email,
       emailError,
