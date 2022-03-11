@@ -1,0 +1,9 @@
+2022-03-11 14:08:45 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "TUTORIALS" already exists; SQL statement:
+CREATE TABLE tutorials
+(
+    id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(255),
+    description VARCHAR(255),
+    published NUMBER(1)
+) [42101-200]
