@@ -1,6 +1,9 @@
-package edu.ntnu.idatt2105.backend.Service;
+package edu.ntnu.oflarsen.backendjpa.service;
 
-import edu.ntnu.idatt2105.backend.model.Equation;
+
+import edu.ntnu.oflarsen.backendjpa.model.Equation;
+import edu.ntnu.oflarsen.backendjpa.repository.EquationRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -8,27 +11,28 @@ import java.util.ArrayList;
 @Service
 public class CalculatorService {
 
+    @Autowired
+    EquationRepository equationRepository;
+
     private double answer;
     private Equation equation;
     private ArrayList<String>  log = new ArrayList<>();
-    /*
-    @Autowired
-    private CalculatorRepo repo;
-    //Used for databse etc
-     */
 
-    public double solve(Equation equation){
+    public Equation solve(Equation equation){
         this.equation = equation;
+        answer = 0;
         if(equation.getOperator() == '+'){
-            return answer = equation.getN1() + equation.getN2();
+            answer = equation.getN1() + equation.getN2();
+            equation.setAnswer(answer);
         }else if(equation.getOperator() == '-'){
-            return answer = equation.getN1() - equation.getN2();
+            answer = equation.getN1() - equation.getN2();
         }else if(equation.getOperator() == '*'){
-            return answer = equation.getN1() * equation.getN2();
+            answer = equation.getN1() * equation.getN2();
         }else if(equation.getOperator() == '/'){
-            return answer = equation.getN1() / equation.getN2();
+            answer = equation.getN1() / equation.getN2();
         }
-        return answer = 0;
+        equation.setAnswer(answer);
+        return equation;
     }
 
     public double getAnswer() {
@@ -39,12 +43,11 @@ public class CalculatorService {
         return equation.toString() + " = " + answer;
     }
 
-    public boolean addToLog(String toAdd){
-        if(log.size() == 0 || !toAdd.equals(log.get(log.size()-1))){
-            log.add(toAdd);
-            return true;
-        }
-        return false;
+    public boolean addToLog(Equation e){
+        if(equation.equals(e))
+            return false;
+        equationRepository.save(new Equation(e));
+        return true;
     }
 
     public ArrayList<String> getLog() {

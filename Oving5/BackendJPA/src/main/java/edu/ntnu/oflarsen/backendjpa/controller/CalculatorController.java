@@ -1,10 +1,13 @@
-package edu.ntnu.idatt2105.backend.Controller;
+package edu.ntnu.oflarsen.backendjpa.controller;
 
-import edu.ntnu.idatt2105.backend.Service.CalculatorService;
-import edu.ntnu.idatt2105.backend.model.Equation;
+import edu.ntnu.oflarsen.backendjpa.model.Equation;
+import edu.ntnu.oflarsen.backendjpa.model.Tutorial;
+import edu.ntnu.oflarsen.backendjpa.service.CalculatorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -28,16 +31,17 @@ public class CalculatorController {
 
     @PostMapping("/solve")
     public double solve(@RequestBody Equation equation){
-        service.solve(equation);
+        Equation solvedE = service.solve(equation);
         logger.info("Equation: n1: " + equation.getN1() +", n2: " +  equation.getN2()
         + ", operator: " + equation.getOperator());
         logger.info("Answer: " + service.getAnswer());
 
-        if(service.addToLog(service.toString())){
+        if(service.addToLog(solvedE)){
             logger.info("Added to log: " + service.toString());
         }
         return service.getAnswer();
     }
+
 
     @GetMapping("/log")
     public ArrayList<String> log(){
