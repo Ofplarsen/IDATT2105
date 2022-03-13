@@ -16,7 +16,7 @@
     ></BaseInput>
 
     <div>
-      <button v-on:click="handleClickSignin_2" id="submitButton">Sign in</button>
+      <button v-on:click="signIn" id="submitButton">Sign in</button>
     </div>
   </div>
   <div v-if="!loginStatus" id="registered">Not registered yet? <router-link to="/register">Register</router-link></div>
@@ -32,24 +32,27 @@ export default {
   name: 'Login',
   components: { BaseInput },
   methods: {
-    async handleClickSignin (){
-      //alert("You entered, username: " + this.username);
-      const loginRequest = { username:this.username, password: this.password };
-      const loginResponse = await axios.post("http://localhost:8085/demo/login", loginRequest);
-      console.log(loginResponse);
-      alert("Login: " + loginResponse.data.loginStatus);
-    },
-    handleClickSignin_2 () {
-      /*
+    signIn () {
+
       const loginRequest = { username: this.username, password: this.password };
-      //const loginResponse = axios.post("http://localhost:8085/demo/login", loginRequest);
-      const loginResponse = "true"
-      console.log(loginResponse)
+      const loginResponse = axios.post("http://localhost:8080/api/login", loginRequest);
       loginResponse.then((resolvedResult) => {
-        this.loginStatus = resolvedResult.data.loginStatus;
-        // alert("Login2: " + resolvedResult.data.loginStatus);
+          if (resolvedResult.data) {
+          this.$store.dispatch("login", this.username)
+          this.$router.push({ name: 'Home' })
+        }
+        this.loginStatus = resolvedResult.data;
+      }).catch((error) => {
+        if(error)
+        if(error.response.status === 401){
+          alert("Wrong username or password")
+          this.loginStatus = false;
+        }else{
+          console.log(error)
+        }
       });
-       */
+
+       /*
       console.log(this.password, this.username)
       this.loginStatus = this.password === "123" && this.username === "admin";
       if(this.loginStatus){
@@ -58,6 +61,8 @@ export default {
       }else{
         this.loginStatus = false
       }
+
+        */
     },
 
   },
