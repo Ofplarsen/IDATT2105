@@ -51,27 +51,29 @@ export default {
         operator: operator
       })
     },
-    solve(){
-      this.$store.dispatch("addToCalculationArray", this.$store.state.tempCalc)
-
-      let solution = parseFloat(this.$store.state.calc[0])
-
-      for (let i = 0; i < this.$store.state.operator.length; i++) {
-        solution = this.solver(solution, this.$store.state.operator[i], this.$store.state.calc[i+1])
-      }
-
-      this.addToLog(solution)
-      this.setSolution(solution)
-      this.resetValues()
-
+    async solve(){
+      this.$store.dispatch("addToCalculationArray", this.$store.state.tempCalc);
+      console.log(this.$store.state.calc)
+      this.solver(this.$store.state.calc[0], this.$store.state.operator[0], this.$store.state.calc[1])
+          .then(response => {
+            this.updateToLog()
+            this.setSolution(response)
+            this.resetValues()
+          })
 
     },
     add(v) {
-      if (!this.$store.state.commaLast || v.target.innerText !== '.') {
+      try{
+        if (!this.$store.state.commaLast || v.target.innerText !== '.') {
 
-        this.$store.dispatch("addToCalculation", v.target.innerText);
-        this.$store.dispatch("addToTempCalc", v.target.innerText);
+          this.$store.dispatch("addToCalculation", v.target.innerText);
+          this.$store.dispatch("addToTempCalc", v.target.innerText);
 
+        }
+      }catch (error){
+
+        this.$store.dispatch("addToCalculation", v);
+        this.$store.dispatch("addToTempCalc", v);
       }
     },
 
@@ -92,7 +94,10 @@ export default {
       this.$store.dispatch("deleteFromCalc");
     },
     async ans(){
-      await this.add(calculator.getAnswer())
+      calculator.getAnswer()
+      .then(ans => {
+        this.add(ans)
+      })
     },
     resetValues(){
       this.$store.dispatch("resetValues");
@@ -105,8 +110,11 @@ export default {
       this.resetValues()
 
     },
-    async addToLog() {
-      await this.$store.dispatch("addToLog", calculator.getLog())
+    async updateToLog() {
+      calculator.getLog(this.$store.state.page)
+        .then(data => {
+          this.$store.dispatch("addToLog", data)
+        })
     },
     setSolution(solution){
       this.$store.dispatch("setSolution", solution)

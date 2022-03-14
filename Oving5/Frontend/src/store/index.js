@@ -10,6 +10,7 @@ export default createStore({ state: {
     operatorLast: false,
     commaLast: false,
     ans: 0,
+    page: 0,
 
     contact_form: {
       name: [],
@@ -40,8 +41,6 @@ export default createStore({ state: {
       state.calc.push(number)
     },
     SET_SOLUTION(state, number) {
-
-
       state.solution = number
       state.ans = number
       state.calculation = number
@@ -81,7 +80,7 @@ export default createStore({ state: {
       }
     },
     ADD_TO_LOG(state, solution) {
-      state.push(solution)
+      state.log = (solution)
     },
     ADD_NAME_TO_FORM(state, name) {
 
@@ -104,6 +103,9 @@ export default createStore({ state: {
       state.login.loginStatus = true
 
     },
+    UPDATE_PAGE(state, page){
+      state.page = page
+    }
   },
   actions: {
     addToLog( {commit}, solution ){
@@ -152,6 +154,9 @@ export default createStore({ state: {
     login({commit}, name) {
       return commit('LOGIN', name)
     },
+    updatePage({commit}, page){
+      return commit('UPDATE_PAGE', page)
+    }
   },
   modules: {},
 });
