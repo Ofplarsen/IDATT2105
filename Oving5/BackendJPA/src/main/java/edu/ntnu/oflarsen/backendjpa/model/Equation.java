@@ -41,6 +41,14 @@ public class Equation {
         this.user = e.getUser();
     }
 
+    public Equation(double n1, double n2, char operator, double answer, Login user) {
+        this.n1 = n1;
+        this.n2 = n2;
+        this.operator = operator;
+        this.answer = answer;
+        this.user = user;
+    }
+
     public int getId() {
         return id;
     }
@@ -87,6 +95,6 @@ public class Equation {
 
     @Override
     public String toString() {
-        return n1 + " " + operator + " " + n2;
+        return n1 + " " + operator + " " + n2 + " = " + answer;
     }
 }

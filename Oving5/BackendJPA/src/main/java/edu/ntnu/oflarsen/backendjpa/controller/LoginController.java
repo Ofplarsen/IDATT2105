@@ -18,13 +18,14 @@ import java.util.Optional;
 @RequestMapping("/api")
 public class LoginController {
 
+    private static Login loggedIn;
     Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     @Autowired
     LoginRepository loginRepository;
 
     @GetMapping("/login/{username}")
-    public ResponseEntity<Login> getTutorialById(@PathVariable("username") String username) {
+    public ResponseEntity<Login> getLoginById(@PathVariable("username") String username) {
         Login loginData = loginRepository.findByUsername(username);
         if (loginData != null) {
             logger.info("Retrieved: " + loginData.getUsername());
@@ -43,11 +44,14 @@ public class LoginController {
                 return new ResponseEntity<>(false, HttpStatus.UNAUTHORIZED);
             }
             logger.info("Login Successful: " + login.getUsername());
+            loggedIn = _login;
             return new ResponseEntity<>(true, HttpStatus.ACCEPTED);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-
+    public static Login getLoggedIn(){
+        return loggedIn;
+    }
 }

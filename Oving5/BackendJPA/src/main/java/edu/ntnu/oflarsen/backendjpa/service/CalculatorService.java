@@ -1,12 +1,16 @@
 package edu.ntnu.oflarsen.backendjpa.service;
 
 
+import edu.ntnu.oflarsen.backendjpa.controller.CalculatorController;
+import edu.ntnu.oflarsen.backendjpa.controller.LoginController;
 import edu.ntnu.oflarsen.backendjpa.model.Equation;
 import edu.ntnu.oflarsen.backendjpa.repository.EquationRepository;
+import edu.ntnu.oflarsen.backendjpa.repository.LoginRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class CalculatorService {
@@ -40,17 +44,19 @@ public class CalculatorService {
     }
 
     public String toString(){
-        return equation.toString() + " = " + answer;
+        return equation.toString();
     }
 
     public boolean addToLog(Equation e){
-        if(equation.equals(e))
-            return false;
-        equationRepository.save(new Equation(e));
+        //if(equation.equals(e))
+        //    return false;
+        equationRepository.save(new Equation(e.getN1(), e.getN2(), e.getOperator(), e.getAnswer(), e.getUser()));
         return true;
     }
 
-    public ArrayList<String> getLog() {
-        return log;
+    public List<Equation> getLog(long page) {
+        if(LoginController.getLoggedIn() == null)
+            return new ArrayList<Equation>();
+        return equationRepository.findById(LoginController.getLoggedIn().getId(), page);
     }
 }

@@ -10,9 +10,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-@CrossOrigin(origins = "http://localhost:8081", maxAge = 3600)
+@CrossOrigin(origins = "http://localhost:8081")
 @RestController
 @RequestMapping("/calc")
 public class CalculatorController {
@@ -35,18 +36,28 @@ public class CalculatorController {
         logger.info("Equation: n1: " + equation.getN1() +", n2: " +  equation.getN2()
         + ", operator: " + equation.getOperator());
         logger.info("Answer: " + service.getAnswer());
-
+        solvedE.setUser(LoginController.getLoggedIn());
         if(service.addToLog(solvedE)){
             logger.info("Added to log: " + service.toString());
         }
+
         return service.getAnswer();
     }
 
 
-    @GetMapping("/log")
-    public ArrayList<String> log(){
-        logger.info("Returned log: " + service.toString());
-        return service.getLog();
+    @GetMapping("/log/{page}")
+    public ArrayList<String> log(@PathVariable("page") long page){
+        //logger.info("Returned log: " + service.toString());
+        logger.info(String.valueOf(page));
+        ArrayList<Equation> equations = (ArrayList<Equation>) service.getLog(page);
+
+        ArrayList<String> strings  = new ArrayList<>();
+
+        for (Equation e : equations){
+            strings.add(e.toString());
+        }
+
+        return strings;
     }
 
 }
