@@ -1,8 +1,11 @@
 package edu.ntnu.oflarsen.backendjpa.controller;
 
+import edu.ntnu.oflarsen.backendjpa.model.Login;
+import edu.ntnu.oflarsen.backendjpa.service.LoginService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,15 +23,15 @@ import java.util.stream.Collectors;
 @EnableAutoConfiguration
 @CrossOrigin
 public class TokenController {
+    @Autowired
+    private LoginService service;
 
     public static String keyStr = "testsecrettestsecrettestsecrettestsecrettestsecret";
 
     @PostMapping(value = "")
     @ResponseStatus(value = HttpStatus.CREATED)
     public String generateToken(@RequestParam("username") final String username, @RequestParam("password") final String password) throws Exception {
-        // check username and password are valid to access token
-        // note that subsequent request to the API need this token
-        if (username.equals("admin") && password.equals("password")) {
+        if (service.checkLogin(new Login(username, password))) {
             return generateToken(username);
         }
         return "Access denied, wrong credentials....";

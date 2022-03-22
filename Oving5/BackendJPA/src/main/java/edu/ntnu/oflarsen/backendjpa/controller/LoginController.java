@@ -3,6 +3,8 @@ package edu.ntnu.oflarsen.backendjpa.controller;
 import edu.ntnu.oflarsen.backendjpa.model.Login;
 import edu.ntnu.oflarsen.backendjpa.model.Tutorial;
 import edu.ntnu.oflarsen.backendjpa.repository.LoginRepository;
+import edu.ntnu.oflarsen.backendjpa.service.CalculatorService;
+import edu.ntnu.oflarsen.backendjpa.service.LoginService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,31 +24,29 @@ public class LoginController {
     Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     @Autowired
-    LoginRepository loginRepository;
+    private LoginService service;
 
     @GetMapping("/login/{username}")
     public ResponseEntity<Login> getLoginById(@PathVariable("username") String username) {
-        Login loginData = loginRepository.findByUsername(username);
-        if (loginData != null) {
-            logger.info("Retrieved: " + loginData.getUsername());
-            return new ResponseEntity<>(loginData, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        Login data = service.okLogin(username);
+        logger.info("Tried to retrieve data from user: " + username);
+        if(data == null)
+            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(data, HttpStatus.ACCEPTED);
     }
 
     @PostMapping("/login")
     public ResponseEntity<Boolean> login(@RequestBody Login login) {
         try {
-            Login _login = loginRepository.findByUsername(login.getUsername());
-            if(_login == null || !login.getPassword().equals(_login.getPassword())) {
+            if(!service.login(login)) {
                 logger.info("Login failed: " + login.getUsername());
                 return new ResponseEntity<>(false, HttpStatus.UNAUTHORIZED);
             }
             logger.info("Login Successful: " + login.getUsername());
-            loggedIn = _login;
+            loggedIn = service.getLoggedIn();
             return new ResponseEntity<>(true, HttpStatus.ACCEPTED);
         } catch (Exception e) {
+            System.out.printf(e.getMessage());
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -54,4 +54,5 @@ public class LoginController {
     public static Login getLoggedIn(){
         return loggedIn;
     }
+
 }
