@@ -33,36 +33,43 @@ export default {
   components: { BaseInput },
   methods: {
     signIn () {
-
-      const loginRequest = { username: this.username, password: this.password };
-      const loginResponse = axios.post("http://localhost:8080/api/login", loginRequest);
-      loginResponse.then((resolvedResult) => {
-          if (resolvedResult.data) {
-          this.$store.dispatch("login", this.username)
-          this.$router.push({ name: 'Home' })
-        }
-        this.loginStatus = resolvedResult.data;
-      }).catch((error) => {
-        if(error)
-        if(error.response.status === 401){
-          alert("Wrong username or password")
+      this.getToken(this.username, this.password).then(ans =>
+      {
+        if(ans.data === "Access denied, wrong credentials...."){
           this.loginStatus = false;
-        }else{
-          console.log(error)
+          return false
         }
-      });
 
-       /*
-      console.log(this.password, this.username)
-      this.loginStatus = this.password === "123" && this.username === "admin";
-      if(this.loginStatus){
-        this.$store.dispatch("login", this.username)
-        this.$router.push({ name: 'Home' })
-      }else{
-        this.loginStatus = false
-      }
-
-        */
+        console.log(ans.data)
+        localStorage.setItem("token", ans.data)
+        const loginRequest = {username: this.username, password: this.password};
+        const config = {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+        };
+        localStorage.setItem("config", ans.data)
+        const loginResponse = axios.post("http://localhost:8080/api/login", loginRequest, config);
+        loginResponse.then((resolvedResult) => {
+          if (resolvedResult.data) {
+            this.$store.dispatch("login", this.username)
+            this.$router.push({name: 'Home'})
+          }
+          this.loginStatus = resolvedResult.data;
+        }).catch((error) => {
+          if (error)
+            if (error.response.status === 404) {
+              alert("Wrong username or password")
+              this.loginStatus = false;
+            } else {
+              console.log(error)
+            }
+        });
+      })
+    },
+    getToken(username, password){
+      const params = new URLSearchParams();
+      params.append('username', username);
+      params.append('password', password);
+      return axios.post('http://localhost:8080/token', params);
     },
 
   },
